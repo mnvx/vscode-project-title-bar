@@ -10,6 +10,20 @@
   "activationEvents": ["onStartupFinished"],
   "main": "./extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "projectTitleBar.openRecent",
+        "title": "Open Recent (with colors)",
+        "category": "Project Title Bar"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+r",
+        "command": "projectTitleBar.openRecent",
+        "when": "!inEditorWidget"
+      }
+    ],
     "configuration": {
       "title": "Project Title Bar",
       "properties": {
