@@ -1,0 +1,29 @@
+{
+  "name": "project-title-bar",
+  "displayName": "Project Title Bar",
+  "description": "Shows current project name in the status bar next to the Remote indicator",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Project Title Bar",
+      "properties": {
+        "projectTitleBar.prefix": {
+          "type": "string",
+          "default": "",
+          "description": "Optional prefix before the project name (e.g. '📁 ')"
+        },
+        "projectTitleBar.color": {
+          "type": "string",
+          "default": "",
+          "description": "Status bar item color (e.g. '#ffffff' or 'statusBarItem.warningForeground')"
+        }
+      }
+    }
+  }
+}
