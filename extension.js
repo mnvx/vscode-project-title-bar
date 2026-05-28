@@ -12,14 +12,13 @@ function getProjectName() {
   return null;
 }
 
-// String -> hue 0..360
-function hashToHue(str) {
+function hashStr(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
     hash |= 0;
   }
-  return (hash >>> 0) % 360;
+  return hash >>> 0;
 }
 
 // HSL -> #rrggbb
@@ -41,13 +40,14 @@ function isDarkTheme() {
 }
 
 function getAutoColor(projectName) {
-  const hue = hashToHue(projectName);
-  const dark = isDarkTheme();
-  // Dark theme:  light pastels  (s=65%, l=72%)
-  // Light theme: deep saturated (s=75%, l=30%)
-  return dark
-    ? hslToHex(hue, 0.65, 0.72)
-    : hslToHex(hue, 0.75, 0.30);
+  const u = hashStr(projectName);
+  // Use different byte ranges so hue, saturation, and lightness all vary independently
+  const hue = (u * 137.508) % 360;
+  const t   = ((u >> 8) & 0xff) / 255; // 0..1 for s
+  const v   = ((u >> 16) & 0xff) / 255; // 0..1 for l
+  return isDarkTheme()
+    ? hslToHex(hue, 0.50 + t * 0.35, 0.58 + v * 0.22) // s 50–85%, l 58–80%
+    : hslToHex(hue, 0.55 + t * 0.30, 0.20 + v * 0.20); // s 55–85%, l 20–40%
 }
 
 function updateStatusBar() {
