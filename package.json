@@ -3,10 +3,11 @@
   "publisher": "isitup",
   "displayName": "Project Title Bar",
   "description": "Shows current project name in the status bar next to the Remote indicator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.75.0"
   },
+  "repository": { "type": "git", "url": "https://github.com/isitup/project-title-bar" },
   "icon": "icon.png",
   "categories": ["Other"],
   "activationEvents": ["onStartupFinished"],
