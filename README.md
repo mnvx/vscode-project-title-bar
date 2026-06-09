@@ -32,3 +32,15 @@ Example `settings.json`:
   "projectTitleBar.color": "#ffcc00"
 }
 ```
+
+ ## Deployment
+
+Update version in package.json
+
+```bash
+make
+```
+
+And upload new version here:
+
+https://marketplace.visualstudio.com/manage/publishers/isitup
