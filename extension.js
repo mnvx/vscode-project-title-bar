@@ -101,6 +101,11 @@ function getColorIconPath(storageDir, hexColor) {
   }
 }
 
+const OPEN_NEW_WINDOW_BUTTON = {
+  iconPath: new vscode.ThemeIcon('empty-window'),
+  tooltip: 'Open in New Window',
+};
+
 async function openRecentWithColors(context) {
   let recent;
   try {
@@ -142,7 +147,7 @@ async function openRecentWithColors(context) {
     const color = getAutoColor(name);
     const iconPath = getColorIconPath(storageDir, color);
 
-    items.push({ label: name, description: detail, iconPath, targetUri });
+    items.push({ label: name, description: detail, iconPath, targetUri, buttons: [OPEN_NEW_WINDOW_BUTTON] });
   }
 
   if (!items.length) {
@@ -150,15 +155,33 @@ async function openRecentWithColors(context) {
     return;
   }
 
-  const selected = await vscode.window.showQuickPick(items, {
-    title: 'Open Recent',
-    placeHolder: 'Type to filter recent projects…',
-    matchOnDescription: true,
+  const picker = vscode.window.createQuickPick();
+  picker.title = 'Open Recent';
+  picker.placeholder = 'Type to filter recent projects… (click ⬜ to open in new window)';
+  picker.matchOnDescription = true;
+  picker.items = items;
+
+  await new Promise(resolve => {
+    picker.onDidTriggerItemButton(e => {
+      if (e.button === OPEN_NEW_WINDOW_BUTTON) {
+        picker.hide();
+        vscode.commands.executeCommand('vscode.openFolder', e.item.targetUri, true);
+        resolve();
+      }
+    });
+    picker.onDidAccept(() => {
+      const [selected] = picker.selectedItems;
+      picker.hide();
+      if (selected) {
+        vscode.commands.executeCommand('vscode.openFolder', selected.targetUri, false);
+      }
+      resolve();
+    });
+    picker.onDidHide(() => resolve());
+    picker.show();
   });
 
-  if (selected) {
-    await vscode.commands.executeCommand('vscode.openFolder', selected.targetUri, false);
-  }
+  picker.dispose();
 }
 
 function activate(context) {

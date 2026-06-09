@@ -1,5 +1,6 @@
 {
   "name": "project-title-bar",
+  "publisher": "isitup",
   "displayName": "Project Title Bar",
   "description": "Shows current project name in the status bar next to the Remote indicator",
   "version": "1.0.0",
